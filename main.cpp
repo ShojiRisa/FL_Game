@@ -42,8 +42,18 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 
 	// 画像などのリソースデータの変数宣言と読み込み
 	// R/はリソースファイルの意味　エクスプローラーにあります
-	int gh[1];
-	gh[0] = LoadGraph("R/.png");//
+	int gh[11];
+	gh[0] = LoadGraph("R/TITLE.png");//タイトル
+	gh[1] = LoadGraph("R/RULE.png");//操作説明
+	gh[2] = LoadGraph("R/GAMESCENE.png");//ゲームシーン
+	gh[3] = LoadGraph("R/ZUKAN.png");//図鑑
+	gh[4] = LoadGraph("R/HIGHHANDEDEND.png");//高飛車エンド
+	gh[5] = LoadGraph("R/YOURDINNEREND.png");//お前晩御飯エンド
+	gh[6] = LoadGraph("R/SLIMEDEATHEND.png");//スライム死亡エンド
+	gh[7] = LoadGraph("R/SLIMEISSHOGGOTHEND.png");//スライムショゴスエンド
+	gh[8] = LoadGraph("R/BEAUTIFULGIRLEND.png");//美少女エンド
+	gh[9] = LoadGraph("R/NORMALSLIMEEND.png");//普通スライムエンド
+	gh[10] = LoadGraph("R/FINISEND.png");//終焉エンド
 
 	//音楽入れるようの変数
 	int sound[1];
@@ -65,7 +75,12 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 		NORMALSLIMEEND,       //10 普通スライムエンド
 		FINISEND,             //11 終焉エンド
 		LNITIALIZATION,       //12 初期化
-		
+
+		CUTE,
+		STUDY,
+		MOVE,
+		HUNGRY,
+
 	};
 	Scene scene = TITLE;
 
@@ -75,7 +90,6 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 	//プレイヤー移動用変数
 	int MouseX = 0;
 	int MouseY = 0;
-
 
 	int cute = 0;
 	int study = 0;
@@ -120,14 +134,18 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 			//マウスが左クリックされているか
 			NewMouse = (GetMouseInput() & MOUSE_INPUT_LEFT);
 
-			if ((NewMouse == 1 && OldMouse == 0))
+			// スタート画面が押されている
+			if ((MouseX > 400) && (MouseX < 750) && (MouseY > 400) && (MouseY < 500) && (NewMouse == 1 && OldMouse == 0))
 			{
 				scene = GAMESCENE;
 			}
-		
+			//操作説明が押されている
+			if ((MouseX > 400) && (MouseX < 750) && (MouseY > 550) && (MouseY < 650) && (NewMouse == 1 && OldMouse == 0))
+			{
+				scene = RULE;
+			}
 		}
 
-		
 		if (scene == RULE)//操作説明
 		{
 			//マウスの初期化　ないと1クリックで全てのシーンがぶっ飛びます
@@ -135,9 +153,28 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 			//マウスが左クリックされているか
 			NewMouse = (GetMouseInput() & MOUSE_INPUT_LEFT);
 
+			//クレジットが押されている
+			if ((MouseX > 900) && (MouseX < 1200) && (MouseY > 600) && (MouseY < 700) && (NewMouse == 1 && OldMouse == 0))
+			{
+				scene = TITLE;
+			}
+
 		}
 
-		
+		if (scene == ZUKAN)//図鑑
+		{
+
+			//マウスの初期化　ないと1クリックで全てのシーンがぶっ飛びます
+			OldMouse = NewMouse;
+			//マウスが左クリックされているか
+			NewMouse = (GetMouseInput() & MOUSE_INPUT_LEFT);
+			//クレジットが押されている
+			if ((MouseX > 900) && (MouseX < 1200) && (MouseY > 600) && (MouseY < 700) && (NewMouse == 1 && OldMouse == 0))
+			{
+				scene = GAMESCENE;
+			}
+		}
+
 		if (scene == GAMESCENE)//ゲームシーン
 		{
 
@@ -175,37 +212,49 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 
 		}
 
-		if (scene == ZUKAN)//図鑑
+		if (scene == CUTE)//かわいさが上昇
 		{
-			
+
+		}
+		if (scene == STUDY)//かしこさが上昇
+		{
+
+		}
+		if (scene == HUNGRY)//おなかが上昇
+		{
+
+		}
+		if (scene == MOVE)//うんどうが上昇
+		{
+
 		}
 
+		//*******************************************************************************************************************
+		//ここからエンド分岐
 		if (scene == HIGHHANDEDEND)//高飛車エンド
 		{
-			
+
 		}
 
-		
 		if (scene == SLIMEDEATHEND)//スライム死亡エンド
 		{
-			
+
 		}
-		
+
 		if (scene == SLIMEISSHOGGOTHEND)//スライム＝ショゴスエンド
 		{
-			
+
 		}
 
-		
+
 		if (scene == BEAUTIFULGIRLEND)//美少女エンド
 		{
-			
+
 		}
 
-		
 		if (scene == NORMALSLIMEEND)//普通スライムエンド
 		{
-			
+
 		}
 
 		if (scene == FINISEND)// 終焉エンド
@@ -218,24 +267,29 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 
 		}
 
-		
-//*******************************************************************************************************************
+
+		//*******************************************************************************************************************
 
 		// 描画処理
 
 		if (scene == TITLE)//タイトル画面
 		{
-			//DrawGraph(0, 0, gh[0], TRUE);//背景画像
+			DrawGraph(0, 0, gh[0], TRUE);//背景画像
+
+			DrawBox(400, 400, 750, 500, GetColor(0, 0, 0), TRUE);    // 四角形を描画
+			DrawBox(400, 550, 750, 650, GetColor(0, 0, 0), TRUE);    // 四角形を描画
 
 		}
-		
+
 		if (scene == RULE)//操作説明
 		{
-
+			DrawGraph(0, 0, gh[1], TRUE);
+			DrawBox(900, 600, 1200, 700, GetColor(0, 0, 0), TRUE);    // 四角形を描画
 		}
-		
+
 		if (scene == GAMESCENE)//ゲームシーン
 		{
+			DrawGraph(0, 0, gh[2], TRUE);
 
 			DrawBox(0, 0, 400, 100, GetColor(0, 0, 0), TRUE);    // 四角形を描画
 			DrawBox(400, 0, 700, 100, GetColor(0, 255, 0), TRUE);    // 四角形を描画
@@ -259,38 +313,43 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 
 		if (scene == ZUKAN)//図鑑
 		{
-
+			DrawGraph(0, 0, gh[3], TRUE);
+			DrawBox(900, 600, 1200, 700, GetColor(0, 0, 0), TRUE);    // 四角形を描画
 		}
-		
+
 		if (scene == HIGHHANDEDEND)//高飛車エンド
 		{
-
+			DrawGraph(0, 0, gh[4], TRUE);
 		}
 
+		if (scene == YOURDINNEREND)//お前晩御飯エンド
+		{
+			DrawGraph(0, 0, gh[5], TRUE);
+		}
 
 		if (scene == SLIMEDEATHEND)//スライム死亡エンド
 		{
-
+			DrawGraph(0, 0, gh[6], TRUE);
 		}
 
 		if (scene == SLIMEISSHOGGOTHEND)//スライム＝ショゴスエンド
 		{
-
+			DrawGraph(0, 0, gh[7], TRUE);
 		}
 
 		if (scene == BEAUTIFULGIRLEND)//美少女エンド
 		{
-
+			DrawGraph(0, 0, gh[8], TRUE);
 		}
 
 		if (scene == NORMALSLIMEEND)//普通スライムエンド
 		{
-
+			DrawGraph(0, 0, gh[9], TRUE);
 		}
 
 		if (scene == FINISEND)// 終焉エンド
 		{
-
+			DrawGraph(0, 0, gh[10], TRUE);
 		}
 
 		// マウスの位置を取得

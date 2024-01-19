@@ -1,8 +1,8 @@
 ﻿  main.cpp
-C:\DxLib_VC\プロジェクトに追加すべきファイル_VC用\DxLib.h(3811,1): warning C4819: ファイルは、現在のコード ページ (932) で表示できない文字を含んでいます。データの損失を防ぐために、ファイルを Unicode 形式で保存してください。
+C:\DxLib_VC\プロジェクトに追加すべきファイル_VC用\DxLib.h(3344,1): warning C4819: ファイルは、現在のコード ページ (932) で表示できない文字を含んでいます。データの損失を防ぐために、ファイルを Unicode 形式で保存してください。
   コード生成しています。
-  1 of 1 functions (100.0%) were compiled.
+  1 of 4 functions (25.0%) were compiled, the rest were copied from previous compilation.
     0 functions were new in current compilation
     0 functions had inline decision re-evaluated but remain unchanged
   コード生成が終了しました。
-  DXlib1.vcxproj -> C:\Users\srs37\Desktop\卒業制作\スライム2.0\Release\DXlib1.exe
+  DXlib1.vcxproj -> C:\Users\tdft6\Downloads\スライム2.0(1)\スライム2.0\Release\DXlib1.exe

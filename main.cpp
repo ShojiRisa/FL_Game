@@ -42,7 +42,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 
 	// 画像などのリソースデータの変数宣言と読み込み
 	// R/はリソースファイルの意味　エクスプローラーにあります
-	int gh[23];
+	int gh[24];
 	gh[0] = LoadGraph("R/TITLE.png");//タイトル
 	gh[1] = LoadGraph("R/RULE.png");//操作説明
 	gh[2] = LoadGraph("R/GAMESCENE.png");//ゲームシーン
@@ -66,6 +66,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 	gh[20] = LoadGraph("R/UI_book.png");//図鑑
 	gh[21] = LoadGraph("R/UI_return.png");//戻るボタン
 	gh[22] = LoadGraph("R/Secret.png");//進化直前画像
+	gh[23] = LoadGraph("R/niku.png");//肉
 
 
 	int slimeGraph[6];
@@ -83,8 +84,8 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 	int choiceGraph[5];
 	LoadDivGraph("R/UI_choice.png", 5, 5, 1, 512, 96, choiceGraph);
 
-	int displayGraph[5];
-	LoadDivGraph("R/UI_display.png", 5, 5, 1, 416, 96, displayGraph);
+	/*int displayGraph[5];
+	LoadDivGraph("R/UI_display.png", 5, 5, 1, 416, 96, displayGraph);*/
 
 
 	//音楽入れるようの変数
@@ -164,6 +165,17 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 	int endflag = 0;
 	int timeflag = 0;
 
+	//スライム
+	int playerX = 750;
+	int playerY = 0;
+
+	int studycount = 0;
+	int gamemovetimer = 0;
+	int studytimer = 0;
+
+	//肉関連
+
+
 	// 最新のキーボード情報用
 	char keys[256] = { 0 };
 
@@ -174,7 +186,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 	SetMouseDispFlag(FALSE);
 
 	//音楽を流す
-	PlaySoundMem(sound[0], DX_PLAYTYPE_BACK);
+	//PlaySoundMem(sound[0], DX_PLAYTYPE_BACK);
 
 	// マウスを非表示状態にする
 	SetMouseDispFlag(TRUE);
@@ -206,24 +218,24 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 			if ((MouseX > 350) && (MouseX < 850) && (MouseY > 480) && (MouseY < 580) && (NewMouse == 1 && OldMouse == 0))
 			{
 				scene = GAMESCENE;
-				//音楽を止める
-				StopSoundMem(sound[0]);
-				//音楽を流す
-				PlaySoundMem(sound[12], DX_PLAYTYPE_BACK);
-				//音楽を流す
-				PlaySoundMem(sound[2], DX_PLAYTYPE_BACK);
+				////音楽を止める
+				//StopSoundMem(sound[0]);
+				////音楽を流す
+				//PlaySoundMem(sound[12], DX_PLAYTYPE_BACK);
+				////音楽を流す
+				//PlaySoundMem(sound[2], DX_PLAYTYPE_BACK);
 
 			}
 			//操作説明が押されている
 			if ((MouseX > 350) && (MouseX < 850) && (MouseY > 580) && (MouseY < 680) && (NewMouse == 1 && OldMouse == 0))
 			{
 				scene = RULE;
-				//音楽を止める
-				StopSoundMem(sound[0]);
-				//音楽を流す
-				PlaySoundMem(sound[12], DX_PLAYTYPE_BACK);
-				//音楽を流す
-				PlaySoundMem(sound[1], DX_PLAYTYPE_BACK);
+				////音楽を止める
+				//StopSoundMem(sound[0]);
+				////音楽を流す
+				//PlaySoundMem(sound[12], DX_PLAYTYPE_BACK);
+				////音楽を流す
+				//PlaySoundMem(sound[1], DX_PLAYTYPE_BACK);
 			}
 		}
 
@@ -238,12 +250,12 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 			if ((MouseX > 900) && (MouseX < 1200) && (MouseY > 600) && (MouseY < 700) && (NewMouse == 1 && OldMouse == 0))
 			{
 				scene = TITLE;
-				//音楽を止める
-				StopSoundMem(sound[1]);
-				//音楽を流す
-				PlaySoundMem(sound[12], DX_PLAYTYPE_BACK);
-				//音楽を流す
-				PlaySoundMem(sound[0], DX_PLAYTYPE_BACK);
+				////音楽を止める
+				//StopSoundMem(sound[1]);
+				////音楽を流す
+				//PlaySoundMem(sound[12], DX_PLAYTYPE_BACK);
+				////音楽を流す
+				//PlaySoundMem(sound[0], DX_PLAYTYPE_BACK);
 
 			}
 
@@ -260,19 +272,22 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 			if ((MouseX > 900) && (MouseX < 1200) && (MouseY > 600) && (MouseY < 700) && (NewMouse == 1 && OldMouse == 0))
 			{
 				scene = GAMESCENE;
-				//音楽を流す
-				PlaySoundMem(sound[12], DX_PLAYTYPE_BACK);
-				//音楽を止める
-				StopSoundMem(sound[3]);
-				//音楽を流す
-				PlaySoundMem(sound[2], DX_PLAYTYPE_BACK);
+				////音楽を流す
+				//PlaySoundMem(sound[12], DX_PLAYTYPE_BACK);
+				////音楽を止める
+				//StopSoundMem(sound[3]);
+				////音楽を流す
+				//PlaySoundMem(sound[2], DX_PLAYTYPE_BACK);
 			}
 		}
 
 		//ゲームシーン
 		if (scene == GAMESCENE)
 		{
-			timer = 0;
+			timer = 700;
+			playerX = 750;
+			studycount = 15;
+			playerY = 390;
 
 			//マウスの初期化　ないと1クリックで全てのシーンがぶっ飛びます
 			OldMouse = NewMouse;
@@ -290,8 +305,8 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 					scene = CUTE;
 					count = count + 1;
 					pink = pink + 1;
-					//音楽を流す
-					PlaySoundMem(sound[12], DX_PLAYTYPE_BACK);
+					////音楽を流す
+					//PlaySoundMem(sound[12], DX_PLAYTYPE_BACK);
 				}
 				//かしこさ
 				if ((MouseX > 50) && (MouseX < 550) && (MouseY > 275) && (MouseY < 380) && (NewMouse == 1 && OldMouse == 0))
@@ -300,8 +315,8 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 					scene = STUDY;
 					count = count + 1;
 					blue = blue + 1;
-					//音楽を流す
-					PlaySoundMem(sound[12], DX_PLAYTYPE_BACK);
+					////音楽を流す
+					//PlaySoundMem(sound[12], DX_PLAYTYPE_BACK);
 				}
 				//うんどう
 				if ((MouseX > 50) && (MouseX < 550) && (MouseY > 400) && (MouseY < 505) && (NewMouse == 1 && OldMouse == 0))
@@ -310,8 +325,10 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 					scene = MOVE;
 					count = count + 1;
 					green = green + 1;
-					//音楽を流す
-					PlaySoundMem(sound[12], DX_PLAYTYPE_BACK);
+					////音楽を流す
+					//PlaySoundMem(sound[12], DX_PLAYTYPE_BACK);
+					playerX = 700;
+					playerY = 200;
 				}
 				//おなか
 				if ((MouseX > 50) && (MouseX < 550) && (MouseY > 525) && (MouseY < 630) && (NewMouse == 1 && OldMouse == 0))
@@ -320,20 +337,20 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 					scene = HUNGRY;
 					count = count + 1;
 					yellow = yellow + 1;
-					//音楽を流す
-					PlaySoundMem(sound[12], DX_PLAYTYPE_BACK);
+					////音楽を流す
+					//PlaySoundMem(sound[12], DX_PLAYTYPE_BACK);
 				}
 
 
 				if ((MouseX > 400) && (MouseX < 700) && (MouseY > 0) && (MouseY < 100) && (NewMouse == 1 && OldMouse == 0))
 				{
 					scene = ZUKAN;
-					//音楽を流す
-					PlaySoundMem(sound[12], DX_PLAYTYPE_BACK);
-					//音楽を止める
-					StopSoundMem(sound[2]);
-					//音楽を流す
-					PlaySoundMem(sound[3], DX_PLAYTYPE_BACK);
+					////音楽を流す
+					//PlaySoundMem(sound[12], DX_PLAYTYPE_BACK);
+					////音楽を止める
+					//StopSoundMem(sound[2]);
+					////音楽を流す
+					//PlaySoundMem(sound[3], DX_PLAYTYPE_BACK);
 				}
 			}
 
@@ -343,67 +360,122 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 				if ((MouseX > 0) && (MouseX < 1200) && (MouseY > 100) && (MouseY < 700) && (NewMouse == 1 && OldMouse == 0))
 				{
 					endflag = 1;
-					//音楽を流す
-					PlaySoundMem(sound[12], DX_PLAYTYPE_BACK);
-					//音楽を止める
-					StopSoundMem(sound[2]);
-					//音楽を流す
-					PlaySoundMem(sound[4], DX_PLAYTYPE_BACK);
-					//音楽を流す
-					PlaySoundMem(sound[6], DX_PLAYTYPE_BACK);
-					//音楽を流す
-					PlaySoundMem(sound[5], DX_PLAYTYPE_BACK);
-					//音楽を流す
-					PlaySoundMem(sound[7], DX_PLAYTYPE_BACK);
-					//音楽を流す
-					PlaySoundMem(sound[9], DX_PLAYTYPE_BACK);
+					////音楽を流す
+					//PlaySoundMem(sound[12], DX_PLAYTYPE_BACK);
+					////音楽を止める
+					//StopSoundMem(sound[2]);
+					////音楽を流す
+					//PlaySoundMem(sound[4], DX_PLAYTYPE_BACK);
+					////音楽を流す
+					//PlaySoundMem(sound[6], DX_PLAYTYPE_BACK);
+					////音楽を流す
+					//PlaySoundMem(sound[5], DX_PLAYTYPE_BACK);
+					////音楽を流す
+					//PlaySoundMem(sound[7], DX_PLAYTYPE_BACK);
+					////音楽を流す
+					//PlaySoundMem(sound[9], DX_PLAYTYPE_BACK);
 				}
 			}
 
 		}
 
+
+
 		//連打防止
 		if (scene == CUTE)//かわいさが上昇
 		{
-			timer = timer + 1;
+			timer = timer - 1;
 
-			if (timer >= 120)
+			if (timer <= 120)
 			{
 				scene = GAMESCENE;
 			}
+
+
 		}
 		if (scene == STUDY)//かしこさが上昇
 		{
-			timer = timer + 1;
+			timer = timer - 1;
+			studytimer = studytimer + 1;
+			playerY = 390;
 
-			if (timer >= 120)
+			if (timer <= 120)
+			{
+				scene = GAMESCENE;
+				study = study - 3;
+				count = count - 1;
+				blue = blue - 1;
+			}
+
+			if (keys[KEY_INPUT_SPACE] == 1 && oldkeys[KEY_INPUT_SPACE] == 0)
+			{
+				playerY = playerY - 50;
+				studycount = studycount - 1;
+			}
+
+			/*if (studytimer >= 10)
+			{
+				playerY = playerY + 50;
+			}*/
+
+			if (studycount <= 0)
 			{
 				scene = GAMESCENE;
 			}
+
+
 		}
 		if (scene == HUNGRY)//おなかが上昇
 		{
-			timer = timer + 1;
+			timer = timer - 1;
 
-			if (timer >= 120)
+			if (timer <= 120)
 			{
 				scene = GAMESCENE;
 			}
 		}
 		if (scene == MOVE)//うんどうが上昇
 		{
-			timer = timer + 1;
+			timer = timer - 1;
 
-			if (timer >= 120)
+			if (timer <= 120)
+			{
+				scene = GAMESCENE;
+				move = move - 3;
+				count = count - 1;
+				green = green - 1;
+			}
+
+			if (keys[KEY_INPUT_UP] == 1 && oldkeys[KEY_INPUT_UP] == 0)
+			{
+				playerY = playerY - 200;
+			}
+			if (keys[KEY_INPUT_DOWN] == 1 && oldkeys[KEY_INPUT_DOWN] == 0)
+			{
+				playerY = playerY + 200;
+			}
+
+			if (playerX <= 100)
 			{
 				scene = GAMESCENE;
 			}
+
+			if (playerY >= 450)
+			{
+				playerY = playerY - 200;
+			}
+			if (playerY <= -100)
+			{
+				playerY = playerY + 200;
+			}
+
 		}
+
 		if (count == 7)
 		{
-			timer = timer + 1;
+			timer = timer - 1;
 
-			if (timer >= 120)
+			if (timer <= 120)
 			{
 				timeflag = 1;
 			}
@@ -417,62 +489,62 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 			if (cute >= 21)
 			{
 				scene = HIGHHANDEDEND;
-				//音楽を止める
-				StopSoundMem(sound[6]);
-				//音楽を止める
-				StopSoundMem(sound[5]);
-				//音楽を止める
-				StopSoundMem(sound[7]);
-				//音楽を止める
-				StopSoundMem(sound[9]);
+				////音楽を止める
+				//StopSoundMem(sound[6]);
+				////音楽を止める
+				//StopSoundMem(sound[5]);
+				////音楽を止める
+				//StopSoundMem(sound[7]);
+				////音楽を止める
+				//StopSoundMem(sound[9]);
 			}
 			if (study >= 21)
 			{
 				scene = SLIMEDEATHEND;
-				//音楽を止める
-				StopSoundMem(sound[4]);
-				//音楽を止める
-				StopSoundMem(sound[5]);
-				//音楽を止める
-				StopSoundMem(sound[7]);
-				//音楽を止める
-				StopSoundMem(sound[9]);
+				////音楽を止める
+				//StopSoundMem(sound[4]);
+				////音楽を止める
+				//StopSoundMem(sound[5]);
+				////音楽を止める
+				//StopSoundMem(sound[7]);
+				////音楽を止める
+				//StopSoundMem(sound[9]);
 			}
 			if (hungry >= 21)
 			{
 				scene = YOURDINNEREND;
-				//音楽を止める
-				StopSoundMem(sound[6]);
-				//音楽を止める
-				StopSoundMem(sound[4]);
-				//音楽を止める
-				StopSoundMem(sound[7]);
-				//音楽を止める
-				StopSoundMem(sound[9]);
+				////音楽を止める
+				//StopSoundMem(sound[6]);
+				////音楽を止める
+				//StopSoundMem(sound[4]);
+				////音楽を止める
+				//StopSoundMem(sound[7]);
+				////音楽を止める
+				//StopSoundMem(sound[9]);
 			}
 			if (move >= 21)
 			{
 				scene = SLIMEISSHOGGOTHEND;
-				//音楽を止める
-				StopSoundMem(sound[6]);
-				//音楽を止める
-				StopSoundMem(sound[5]);
-				//音楽を止める
-				StopSoundMem(sound[4]);
-				//音楽を止める
-				StopSoundMem(sound[9]);
+				////音楽を止める
+				//StopSoundMem(sound[6]);
+				////音楽を止める
+				//StopSoundMem(sound[5]);
+				////音楽を止める
+				//StopSoundMem(sound[4]);
+				////音楽を止める
+				//StopSoundMem(sound[9]);
 			}
 			else if (cute <= 20 && study <= 20 && hungry <= 20 && move <= 20)
 			{
 				scene = NORMALSLIMEEND;
-				//音楽を止める
-				StopSoundMem(sound[6]);
-				//音楽を止める
-				StopSoundMem(sound[5]);
-				//音楽を止める
-				StopSoundMem(sound[7]);
-				//音楽を止める
-				StopSoundMem(sound[4]);
+				////音楽を止める
+				//StopSoundMem(sound[6]);
+				////音楽を止める
+				//StopSoundMem(sound[5]);
+				////音楽を止める
+				//StopSoundMem(sound[7]);
+				////音楽を止める
+				//StopSoundMem(sound[4]);
 			}
 		}
 
@@ -531,20 +603,20 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 			endflag = 0;
 			timeflag = 0;
 			
-			//音楽を止める
-			StopSoundMem(sound[4]);
-			//音楽を止める
-			StopSoundMem(sound[6]);
-			//音楽を止める
-			StopSoundMem(sound[5]);
-			//音楽を止める
-			StopSoundMem(sound[7]);
-			//音楽を止める
-			StopSoundMem(sound[9]);
-			//音楽を流す
-			PlaySoundMem(sound[0], DX_PLAYTYPE_BACK);
-			//音楽を流す
-			PlaySoundMem(sound[12], DX_PLAYTYPE_BACK);
+			////音楽を止める
+			//StopSoundMem(sound[4]);
+			////音楽を止める
+			//StopSoundMem(sound[6]);
+			////音楽を止める
+			//StopSoundMem(sound[5]);
+			////音楽を止める
+			//StopSoundMem(sound[7]);
+			////音楽を止める
+			//StopSoundMem(sound[9]);
+			////音楽を流す
+			//PlaySoundMem(sound[0], DX_PLAYTYPE_BACK);
+			////音楽を流す
+			//PlaySoundMem(sound[12], DX_PLAYTYPE_BACK);
 		}
 
 
@@ -777,6 +849,8 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 			}
 		}
 
+
+
 		//かわいさが上昇
 		if (scene == CUTE)
 		{
@@ -784,184 +858,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 
 			DrawGraph(750, 390, slimeGraph[1], TRUE);//スライム描画
 
-			DrawGraph(384, 0, gh[20], TRUE); //ずかん
-			//DrawBox(700, 0, 1200, 100, GetColor(255, 255, 255), TRUE);    // 四角形を描画
-
-			DrawGraph(50, 150, choiceGraph[0], TRUE);//日数//かわいがる
-			DrawGraph(50, 275, choiceGraph[1], TRUE);//しつける
-			DrawGraph(50, 400, choiceGraph[2], TRUE);//ごはん
-			DrawGraph(50, 525, choiceGraph[3], TRUE);//うんどう
-
-			//DrawBox(700, 150, 1100, 255, GetColor(180, 255, 255), TRUE);    // 四角形を描画 チャットウインドウ
-			DrawGraph(700, 150, displayGraph[0], TRUE);//チャットウインドウを表示
-
-			unsigned int Color;
-
-			Color = GetColor(255, 255, 255);
-			//デバックテキスト
-			/*DrawFormatString(0, 0, Color, " かわいさ%d", cute);
-			DrawFormatString(0, 50, Color, " しつけ%d", study);
-			DrawFormatString(0, 100, Color, " おなか%d", hungry);
-			DrawFormatString(0, 150, Color, " きんにく%d", move);*/
-
-			//DrawGraph(600, 300, slimeGraph[0], TRUE);//スライム
-			DrawGraph(0, 0, gh[11], TRUE);//日数
-
-			//日付のカウント
-			if (count == 0)
-			{
-				DrawGraph(180, 0, scoreGraph[0], TRUE);
-			}
-			if (count == 1)
-			{
-				DrawGraph(180, 0, scoreGraph[1], TRUE);
-			}
-			if (count == 2)
-			{
-				DrawGraph(180, 0, scoreGraph[2], TRUE);
-			}
-			if (count == 3)
-			{
-				DrawGraph(180, 0, scoreGraph[3], TRUE);
-			}
-			if (count == 4)
-			{
-				DrawGraph(180, 0, scoreGraph[4], TRUE);
-			}
-			if (count == 5)
-			{
-				DrawGraph(180, 0, scoreGraph[5], TRUE);
-			}
-			if (count == 6)
-			{
-				DrawGraph(180, 0, scoreGraph[6], TRUE);
-			}
-			if (count == 7)
-			{
-				DrawGraph(180, 0, scoreGraph[7], TRUE);
-			}
-
-			DrawGraph(768, -2, gh[12], TRUE);//パラメーターアイコン
-
-			//ハートゲージ
-			if (pink >= 1)
-			{
-				DrawGraph(820, 0, gageGraph[0], TRUE);
-			}
-			if (pink >= 2)
-			{
-				DrawGraph(840, 0, gageGraph[0], TRUE);
-			}
-			if (pink >= 3)
-			{
-				DrawGraph(860, 0, gageGraph[0], TRUE);
-			}
-			if (pink >= 4)
-			{
-				DrawGraph(880, 0, gageGraph[0], TRUE);
-			}
-			if (pink >= 5)
-			{
-				DrawGraph(900, 0, gageGraph[0], TRUE);
-			}
-			if (pink >= 6)
-			{
-				DrawGraph(920, 0, gageGraph[0], TRUE);
-			}
-			if (pink >= 7)
-			{
-				DrawGraph(940, 0, gageGraph[0], TRUE);
-			}
-
-			//スペードゲージ
-			if (blue >= 1)
-			{
-				DrawGraph(820, 50, gageGraph[1], TRUE);
-			}
-			if (blue >= 2)
-			{
-				DrawGraph(840, 50, gageGraph[1], TRUE);
-			}
-			if (blue >= 3)
-			{
-				DrawGraph(860, 50, gageGraph[1], TRUE);
-			}
-			if (blue >= 4)
-			{
-				DrawGraph(880, 50, gageGraph[1], TRUE);
-			}
-			if (blue >= 5)
-			{
-				DrawGraph(900, 50, gageGraph[1], TRUE);
-			}
-			if (blue >= 6)
-			{
-				DrawGraph(920, 50, gageGraph[1], TRUE);
-			}
-			if (blue >= 7)
-			{
-				DrawGraph(940, 50, gageGraph[1], TRUE);
-			}
-
-			//クローバーゲージ
-			if (green >= 1)
-			{
-				DrawGraph(1030, 0, gageGraph[2], TRUE);
-			}
-			if (green >= 2)
-			{
-				DrawGraph(1050, 0, gageGraph[2], TRUE);
-			}
-			if (green >= 3)
-			{
-				DrawGraph(1070, 0, gageGraph[2], TRUE);
-			}
-			if (green >= 4)
-			{
-				DrawGraph(1090, 0, gageGraph[2], TRUE);
-			}
-			if (green >= 5)
-			{
-				DrawGraph(1110, 0, gageGraph[2], TRUE);
-			}
-			if (green >= 6)
-			{
-				DrawGraph(1130, 0, gageGraph[2], TRUE);
-			}
-			if (green >= 7)
-			{
-				DrawGraph(1150, 0, gageGraph[2], TRUE);
-			}
-
-			//ひし形ゲージ
-			if (yellow >= 1)
-			{
-				DrawGraph(1030, 50, gageGraph[3], TRUE);
-			}
-			if (yellow >= 2)
-			{
-				DrawGraph(1050, 50, gageGraph[3], TRUE);
-			}
-			if (yellow >= 3)
-			{
-				DrawGraph(1070, 50, gageGraph[3], TRUE);
-			}
-			if (yellow >= 4)
-			{
-				DrawGraph(1090, 50, gageGraph[3], TRUE);
-			}
-			if (yellow >= 5)
-			{
-				DrawGraph(1110, 50, gageGraph[3], TRUE);
-			}
-			if (yellow >= 6)
-			{
-				DrawGraph(1130, 50, gageGraph[3], TRUE);
-			}
-			if (yellow >= 7)
-			{
-				DrawGraph(1150, 50, gageGraph[3], TRUE);
-			}
+			
 
 		}
 
@@ -970,187 +867,41 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 		{
 			DrawGraph(0, 0, gh[2], TRUE);
 
-			DrawGraph(750, 390, slimeGraph[5], TRUE);//スライム描画
+			DrawGraph(480, playerY, slimeGraph[5], TRUE);//スライム描画
 
-			DrawGraph(384, 0, gh[20], TRUE); //ずかん
-			//DrawBox(700, 0, 1200, 100, GetColor(255, 255, 255), TRUE);    // 四角形を描画
+			char t[100]; //文字用変数
+			int j; //ループ
+			int e = timer / 60 - 1;
 
-			DrawGraph(50, 150, choiceGraph[0], TRUE);//日数//かわいがる
-			DrawGraph(50, 275, choiceGraph[1], TRUE);//しつける
-			DrawGraph(50, 400, choiceGraph[2], TRUE);//ごはん
-			DrawGraph(50, 525, choiceGraph[3], TRUE);//うんどう
+			//スコアを文字へ変換
+			sprintf_s(t, 100, "%02d", e);
 
-			//DrawBox(700, 150, 1100, 255, GetColor(180, 255, 255), TRUE);    // 四角形を描画 チャットウインドウ
-			DrawGraph(700, 150, displayGraph[1], TRUE);//チャットウインドウを表示
+			//繰り返し
+			for (j = 0; j < 2; j++)
+			{
+				//1桁を取り出して、数値に変換
+				int m = t[j] - '0';
 
-			unsigned int Color;
-
-			Color = GetColor(255, 255, 255);
-			//デバックテキスト
-			/*DrawFormatString(0, 0, Color, " かわいさ%d", cute);
-			DrawFormatString(0, 50, Color, " しつけ%d", study);
-			DrawFormatString(0, 100, Color, " おなか%d", hungry);
-			DrawFormatString(0, 150, Color, " きんにく%d", move);*/
-
-			//DrawGraph(600, 300, slimeGraph[0], TRUE);//スライム
-			DrawGraph(0, 0, gh[11], TRUE);//日数
-
-			//日付のカウント
-			if (count == 0)
-			{
-				DrawGraph(180, 0, scoreGraph[0], TRUE);
-			}
-			if (count == 1)
-			{
-				DrawGraph(180, 0, scoreGraph[1], TRUE);
-			}
-			if (count == 2)
-			{
-				DrawGraph(180, 0, scoreGraph[2], TRUE);
-			}
-			if (count == 3)
-			{
-				DrawGraph(180, 0, scoreGraph[3], TRUE);
-			}
-			if (count == 4)
-			{
-				DrawGraph(180, 0, scoreGraph[4], TRUE);
-			}
-			if (count == 5)
-			{
-				DrawGraph(180, 0, scoreGraph[5], TRUE);
-			}
-			if (count == 6)
-			{
-				DrawGraph(180, 0, scoreGraph[6], TRUE);
-			}
-			if (count == 7)
-			{
-				DrawGraph(180, 0, scoreGraph[7], TRUE);
+				//数値をグラフィックで表示
+				DrawGraph(0 + j * 90, 0, scoreGraph[m], TRUE);
 			}
 
-			DrawGraph(768, -2, gh[12], TRUE);//パラメーターアイコン
+			//変数
+			char s[100]; //文字用変数
+			int i; //ループ
 
-			//ハートゲージ
-			if (pink >= 1)
-			{
-				DrawGraph(820, 0, gageGraph[0], TRUE);
-			}
-			if (pink >= 2)
-			{
-				DrawGraph(840, 0, gageGraph[0], TRUE);
-			}
-			if (pink >= 3)
-			{
-				DrawGraph(860, 0, gageGraph[0], TRUE);
-			}
-			if (pink >= 4)
-			{
-				DrawGraph(880, 0, gageGraph[0], TRUE);
-			}
-			if (pink >= 5)
-			{
-				DrawGraph(900, 0, gageGraph[0], TRUE);
-			}
-			if (pink >= 6)
-			{
-				DrawGraph(920, 0, gageGraph[0], TRUE);
-			}
-			if (pink >= 7)
-			{
-				DrawGraph(940, 0, gageGraph[0], TRUE);
-			}
+			//スコアを文字へ変換
+			sprintf_s(s, 100, "%02d", studycount);
 
-			//スペードゲージ
-			if (blue >= 1)
+			//繰り返し
+			for (i = 0; i < 2; i++)
 			{
-				DrawGraph(820, 50, gageGraph[1], TRUE);
-			}
-			if (blue >= 2)
-			{
-				DrawGraph(840, 50, gageGraph[1], TRUE);
-			}
-			if (blue >= 3)
-			{
-				DrawGraph(860, 50, gageGraph[1], TRUE);
-			}
-			if (blue >= 4)
-			{
-				DrawGraph(880, 50, gageGraph[1], TRUE);
-			}
-			if (blue >= 5)
-			{
-				DrawGraph(900, 50, gageGraph[1], TRUE);
-			}
-			if (blue >= 6)
-			{
-				DrawGraph(920, 50, gageGraph[1], TRUE);
-			}
-			if (blue >= 7)
-			{
-				DrawGraph(940, 50, gageGraph[1], TRUE);
-			}
+				//1桁を取り出して、数値に変換
+				int n = s[i] - '0';
 
-			//クローバーゲージ
-			if (green >= 1)
-			{
-				DrawGraph(1030, 0, gageGraph[2], TRUE);
+				//数値をグラフィックで表示
+				DrawGraph(1000 + i * 90, 0, scoreGraph[n], TRUE);
 			}
-			if (green >= 2)
-			{
-				DrawGraph(1050, 0, gageGraph[2], TRUE);
-			}
-			if (green >= 3)
-			{
-				DrawGraph(1070, 0, gageGraph[2], TRUE);
-			}
-			if (green >= 4)
-			{
-				DrawGraph(1090, 0, gageGraph[2], TRUE);
-			}
-			if (green >= 5)
-			{
-				DrawGraph(1110, 0, gageGraph[2], TRUE);
-			}
-			if (green >= 6)
-			{
-				DrawGraph(1130, 0, gageGraph[2], TRUE);
-			}
-			if (green >= 7)
-			{
-				DrawGraph(1150, 0, gageGraph[2], TRUE);
-			}
-
-			//ひし形ゲージ
-			if (yellow >= 1)
-			{
-				DrawGraph(1030, 50, gageGraph[3], TRUE);
-			}
-			if (yellow >= 2)
-			{
-				DrawGraph(1050, 50, gageGraph[3], TRUE);
-			}
-			if (yellow >= 3)
-			{
-				DrawGraph(1070, 50, gageGraph[3], TRUE);
-			}
-			if (yellow >= 4)
-			{
-				DrawGraph(1090, 50, gageGraph[3], TRUE);
-			}
-			if (yellow >= 5)
-			{
-				DrawGraph(1110, 50, gageGraph[3], TRUE);
-			}
-			if (yellow >= 6)
-			{
-				DrawGraph(1130, 50, gageGraph[3], TRUE);
-			}
-			if (yellow >= 7)
-			{
-				DrawGraph(1150, 50, gageGraph[3], TRUE);
-			}
-
 		}
 
 		//うんどうが上昇
@@ -1158,186 +909,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 		{
 			DrawGraph(0, 0, gh[2], TRUE);
 
-			DrawGraph(750, 390, slimeGraph[4], TRUE);//スライム描画
-
-			DrawGraph(384, 0, gh[20], TRUE); //ずかん
-			//DrawBox(700, 0, 1200, 100, GetColor(255, 255, 255), TRUE);    // 四角形を描画
-
-			DrawGraph(50, 150, choiceGraph[0], TRUE);//日数//かわいがる
-			DrawGraph(50, 275, choiceGraph[1], TRUE);//しつける
-			DrawGraph(50, 400, choiceGraph[2], TRUE);//ごはん
-			DrawGraph(50, 525, choiceGraph[3], TRUE);//うんどう
-
-			//DrawBox(700, 150, 1100, 255, GetColor(180, 255, 255), TRUE);    // 四角形を描画 チャットウインドウ
-			DrawGraph(700, 150, displayGraph[2], TRUE);//チャットウインドウを表示
-
-			unsigned int Color;
-
-			Color = GetColor(255, 255, 255);
-			//デバックテキスト
-		/*	DrawFormatString(0, 0, Color, " かわいさ%d", cute);
-			DrawFormatString(0, 50, Color, " しつけ%d", study);
-			DrawFormatString(0, 100, Color, " おなか%d", hungry);
-			DrawFormatString(0, 150, Color, " きんにく%d", move);*/
-
-			//DrawGraph(600, 300, slimeGraph[0], TRUE);//スライム
-			DrawGraph(0, 0, gh[11], TRUE);//日数
-
-			//日付のカウント
-			if (count == 0)
-			{
-				DrawGraph(180, 0, scoreGraph[0], TRUE);
-			}
-			if (count == 1)
-			{
-				DrawGraph(180, 0, scoreGraph[1], TRUE);
-			}
-			if (count == 2)
-			{
-				DrawGraph(180, 0, scoreGraph[2], TRUE);
-			}
-			if (count == 3)
-			{
-				DrawGraph(180, 0, scoreGraph[3], TRUE);
-			}
-			if (count == 4)
-			{
-				DrawGraph(180, 0, scoreGraph[4], TRUE);
-			}
-			if (count == 5)
-			{
-				DrawGraph(180, 0, scoreGraph[5], TRUE);
-			}
-			if (count == 6)
-			{
-				DrawGraph(180, 0, scoreGraph[6], TRUE);
-			}
-			if (count == 7)
-			{
-				DrawGraph(180, 0, scoreGraph[7], TRUE);
-			}
-
-			DrawGraph(768, -2, gh[12], TRUE);//パラメーターアイコン
-
-			//ハートゲージ
-			if (pink >= 1)
-			{
-				DrawGraph(820, 0, gageGraph[0], TRUE);
-			}
-			if (pink >= 2)
-			{
-				DrawGraph(840, 0, gageGraph[0], TRUE);
-			}
-			if (pink >= 3)
-			{
-				DrawGraph(860, 0, gageGraph[0], TRUE);
-			}
-			if (pink >= 4)
-			{
-				DrawGraph(880, 0, gageGraph[0], TRUE);
-			}
-			if (pink >= 5)
-			{
-				DrawGraph(900, 0, gageGraph[0], TRUE);
-			}
-			if (pink >= 6)
-			{
-				DrawGraph(920, 0, gageGraph[0], TRUE);
-			}
-			if (pink >= 7)
-			{
-				DrawGraph(940, 0, gageGraph[0], TRUE);
-			}
-
-			//スペードゲージ
-			if (blue >= 1)
-			{
-				DrawGraph(820, 50, gageGraph[1], TRUE);
-			}
-			if (blue >= 2)
-			{
-				DrawGraph(840, 50, gageGraph[1], TRUE);
-			}
-			if (blue >= 3)
-			{
-				DrawGraph(860, 50, gageGraph[1], TRUE);
-			}
-			if (blue >= 4)
-			{
-				DrawGraph(880, 50, gageGraph[1], TRUE);
-			}
-			if (blue >= 5)
-			{
-				DrawGraph(900, 50, gageGraph[1], TRUE);
-			}
-			if (blue >= 6)
-			{
-				DrawGraph(920, 50, gageGraph[1], TRUE);
-			}
-			if (blue >= 7)
-			{
-				DrawGraph(940, 50, gageGraph[1], TRUE);
-			}
-
-			//クローバーゲージ
-			if (green >= 1)
-			{
-				DrawGraph(1030, 0, gageGraph[2], TRUE);
-			}
-			if (green >= 2)
-			{
-				DrawGraph(1050, 0, gageGraph[2], TRUE);
-			}
-			if (green >= 3)
-			{
-				DrawGraph(1070, 0, gageGraph[2], TRUE);
-			}
-			if (green >= 4)
-			{
-				DrawGraph(1090, 0, gageGraph[2], TRUE);
-			}
-			if (green >= 5)
-			{
-				DrawGraph(1110, 0, gageGraph[2], TRUE);
-			}
-			if (green >= 6)
-			{
-				DrawGraph(1130, 0, gageGraph[2], TRUE);
-			}
-			if (green >= 7)
-			{
-				DrawGraph(1150, 0, gageGraph[2], TRUE);
-			}
-
-			//ひし形ゲージ
-			if (yellow >= 1)
-			{
-				DrawGraph(1030, 50, gageGraph[3], TRUE);
-			}
-			if (yellow >= 2)
-			{
-				DrawGraph(1050, 50, gageGraph[3], TRUE);
-			}
-			if (yellow >= 3)
-			{
-				DrawGraph(1070, 50, gageGraph[3], TRUE);
-			}
-			if (yellow >= 4)
-			{
-				DrawGraph(1090, 50, gageGraph[3], TRUE);
-			}
-			if (yellow >= 5)
-			{
-				DrawGraph(1110, 50, gageGraph[3], TRUE);
-			}
-			if (yellow >= 6)
-			{
-				DrawGraph(1130, 50, gageGraph[3], TRUE);
-			}
-			if (yellow >= 7)
-			{
-				DrawGraph(1150, 50, gageGraph[3], TRUE);
-			}
+			DrawGraph(playerX, playerY, slimeGraph[4], TRUE);//スライム描画
 
 		}
 
@@ -1349,184 +921,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 
 			DrawGraph(750, 390, slimeGraph[3], TRUE);//スライム描画
 
-			DrawGraph(384, 0, gh[20], TRUE); //ずかん
-			//DrawBox(700, 0, 1200, 100, GetColor(255, 255, 255), TRUE);    // 四角形を描画
-
-			DrawGraph(50, 150, choiceGraph[0], TRUE);//日数//かわいがる
-			DrawGraph(50, 275, choiceGraph[1], TRUE);//しつける
-			DrawGraph(50, 400, choiceGraph[2], TRUE);//ごはん
-			DrawGraph(50, 525, choiceGraph[3], TRUE);//うんどう
-
-			//DrawBox(700, 150, 1100, 255, GetColor(180, 255, 255), TRUE);    // 四角形を描画 チャットウインドウ
-			DrawGraph(700, 150, displayGraph[3], TRUE);//チャットウインドウを表示
-
-			unsigned int Color;
-
-			Color = GetColor(255, 255, 255);
-			//デバックテキスト
-			/*DrawFormatString(0, 0, Color, " かわいさ%d", cute);
-			DrawFormatString(0, 50, Color, " しつけ%d", study);
-			DrawFormatString(0, 100, Color, " おなか%d", hungry);
-			DrawFormatString(0, 150, Color, " きんにく%d", move);*/
-
-			//DrawGraph(600, 300, slimeGraph[0], TRUE);//スライム
-			DrawGraph(0, 0, gh[11], TRUE);//日数
-
-			//日付のカウント
-			if (count == 0)
-			{
-				DrawGraph(180, 0, scoreGraph[0], TRUE);
-			}
-			if (count == 1)
-			{
-				DrawGraph(180, 0, scoreGraph[1], TRUE);
-			}
-			if (count == 2)
-			{
-				DrawGraph(180, 0, scoreGraph[2], TRUE);
-			}
-			if (count == 3)
-			{
-				DrawGraph(180, 0, scoreGraph[3], TRUE);
-			}
-			if (count == 4)
-			{
-				DrawGraph(180, 0, scoreGraph[4], TRUE);
-			}
-			if (count == 5)
-			{
-				DrawGraph(180, 0, scoreGraph[5], TRUE);
-			}
-			if (count == 6)
-			{
-				DrawGraph(180, 0, scoreGraph[6], TRUE);
-			}
-			if (count == 7)
-			{
-				DrawGraph(180, 0, scoreGraph[7], TRUE);
-			}
-
-			DrawGraph(768, -2, gh[12], TRUE);//パラメーターアイコン
-
-			//ハートゲージ
-			if (pink >= 1)
-			{
-				DrawGraph(820, 0, gageGraph[0], TRUE);
-			}
-			if (pink >= 2)
-			{
-				DrawGraph(840, 0, gageGraph[0], TRUE);
-			}
-			if (pink >= 3)
-			{
-				DrawGraph(860, 0, gageGraph[0], TRUE);
-			}
-			if (pink >= 4)
-			{
-				DrawGraph(880, 0, gageGraph[0], TRUE);
-			}
-			if (pink >= 5)
-			{
-				DrawGraph(900, 0, gageGraph[0], TRUE);
-			}
-			if (pink >= 6)
-			{
-				DrawGraph(920, 0, gageGraph[0], TRUE);
-			}
-			if (pink >= 7)
-			{
-				DrawGraph(940, 0, gageGraph[0], TRUE);
-			}
-
-			//スペードゲージ
-			if (blue >= 1)
-			{
-				DrawGraph(820, 50, gageGraph[1], TRUE);
-			}
-			if (blue >= 2)
-			{
-				DrawGraph(840, 50, gageGraph[1], TRUE);
-			}
-			if (blue >= 3)
-			{
-				DrawGraph(860, 50, gageGraph[1], TRUE);
-			}
-			if (blue >= 4)
-			{
-				DrawGraph(880, 50, gageGraph[1], TRUE);
-			}
-			if (blue >= 5)
-			{
-				DrawGraph(900, 50, gageGraph[1], TRUE);
-			}
-			if (blue >= 6)
-			{
-				DrawGraph(920, 50, gageGraph[1], TRUE);
-			}
-			if (blue >= 7)
-			{
-				DrawGraph(940, 50, gageGraph[1], TRUE);
-			}
-
-			//クローバーゲージ
-			if (green >= 1)
-			{
-				DrawGraph(1030, 0, gageGraph[2], TRUE);
-			}
-			if (green >= 2)
-			{
-				DrawGraph(1050, 0, gageGraph[2], TRUE);
-			}
-			if (green >= 3)
-			{
-				DrawGraph(1070, 0, gageGraph[2], TRUE);
-			}
-			if (green >= 4)
-			{
-				DrawGraph(1090, 0, gageGraph[2], TRUE);
-			}
-			if (green >= 5)
-			{
-				DrawGraph(1110, 0, gageGraph[2], TRUE);
-			}
-			if (green >= 6)
-			{
-				DrawGraph(1130, 0, gageGraph[2], TRUE);
-			}
-			if (green >= 7)
-			{
-				DrawGraph(1150, 0, gageGraph[2], TRUE);
-			}
-
-			//ひし形ゲージ
-			if (yellow >= 1)
-			{
-				DrawGraph(1030, 50, gageGraph[3], TRUE);
-			}
-			if (yellow >= 2)
-			{
-				DrawGraph(1050, 50, gageGraph[3], TRUE);
-			}
-			if (yellow >= 3)
-			{
-				DrawGraph(1070, 50, gageGraph[3], TRUE);
-			}
-			if (yellow >= 4)
-			{
-				DrawGraph(1090, 50, gageGraph[3], TRUE);
-			}
-			if (yellow >= 5)
-			{
-				DrawGraph(1110, 50, gageGraph[3], TRUE);
-			}
-			if (yellow >= 6)
-			{
-				DrawGraph(1130, 50, gageGraph[3], TRUE);
-			}
-			if (yellow >= 7)
-			{
-				DrawGraph(1150, 50, gageGraph[3], TRUE);
-			}
+			
 
 		}
 
